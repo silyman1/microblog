@@ -1,0 +1,14 @@
+<!-- extend from base layout -->
+{%extends "base.html"%}
+{%block content%}
+<h1>登陆</h1>
+<form action=""method="post"name="login">
+	{{form.hidden_tag()}}
+	<p>
+		请输入你的openID:<br>
+		{{form.openid(size=80)}}<br>
+	</p>
+	<p>{{form.remember_me}} 记住此ID</p>
+    <p><input type="submit" value="Sign In"></p>
+</form>
+{% endblock %}
