@@ -1,13 +1,19 @@
 <html>
   <head>
     {%if title%}
-    <title>{{title}} - 微型博客</title>
+    <title>{{title}}</title>
     {%else%}
     <title>首页</title>
     {%endif%}
   <head>
   <body>
-    <div>导航：<a href="/index">首页</a></div>
+    <div>导航：
+	<a href="/index">首页</a></div>
+	{%if g.user.is_authenticated()%}
+	| <a href="{{url_for('user',nickname=g.user.nickname)}}">我的个人信息页</a>
+	| <a href="{{url_for('logout')}}">退出登录</a>
+	{% endif %}
+	</div>
 	<hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
