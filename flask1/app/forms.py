@@ -17,7 +17,7 @@ class EditForm(Form):
 			return False
 		if self.nickname.data == self.original_nickname:
 			return True
-		user = User.query.filter_by(nickname=self.original_nickname.data).first()
+		user = User.query.filter_by(nickname=self.original_nickname).first()
 		if user != None:
 			self.nickname.errors.append('此昵称已被使用!!!')
 			return False

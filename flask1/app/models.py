@@ -8,7 +8,7 @@ followers =db.Table('followers',
 class User(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
 	nickname = db.Column(db.String(64),index= True,unique=True)
-	email = db.Column(db.String(120),index= True,unique=True)
+	email = db.Column(db.String(120),index= True,unique=True)#对字段修改migrate好像无效
 	posts = db.relationship('Post',backref='author',lazy='dynamic')
 	about_me = db.Column(db.String(140))
 	last_seen = db.Column(db.DateTime)
@@ -16,7 +16,8 @@ class User(db.Model):
 							secondary = followers,
 							primaryjoin = (followers.c.follower_id == id),
 							secondaryjoin = (followers.c.followed_id == id),
-							backref =db.backref('followers',lazy ='dynamic'))
+							backref =db.backref('followers',lazy ='dynamic'),
+							lazy='dynamic')
 	def follow(self,user):
 		if not self.is_following(user):
 			self.followed.append(user)

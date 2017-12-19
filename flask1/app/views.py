@@ -50,7 +50,7 @@ def after_login(resp):
 	if resp.email is None or resp.email =='':
 		flash('email不能为空，请重新登录')
 		return redirect(url_for('login'))
-	user =User.query.filter_by(email =resp.email).first()
+	user =User.query.filter_by(email=resp.eml).first()#user =User.query.filter_by(nickname =resp.nickname).first()
 	if user is None:
 		nickname = resp.nickname
 		if nickname is None or nickname == '':
@@ -97,8 +97,7 @@ def edit():
 		g.user.about_me = form.about_me.data
 		db.session.add(g.user)
 		db.session.commit()
-		flash('信息修改成功！5秒后将返回')
-		time.sleep(5)
+		flash('信息修改成功！')
 		return redirect(url_for('user',nickname=g.user.nickname))
 	else:
 		form.nickname.data =g.user.nickname
