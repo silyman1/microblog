@@ -15,3 +15,5 @@ lm.init_app(app)
 lm.login_view = 'login'  #让flask_login知道哪个视图允许用户登录
 oid = OpenID(app,os.path.join(basedir,'tmp'))
 from app import views,models
+from momentjs import momentjs
+app.jinja_env.globals['momentjs'] = momentjs

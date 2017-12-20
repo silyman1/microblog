@@ -2,7 +2,7 @@
 from app import app,db,lm,oid
 from flask import render_template,flash,redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from .forms import LoginForm,EditForm,PostForm
+from .forms import LoginForm,EditForm,PostForm,SearchForm
 from .models import User,Post
 import sys
 import time
@@ -17,6 +17,7 @@ def before_request():
 		g.user.last_seen = datetime.utcnow()
 		db.session.add(g.user)
 		db.session.commit()
+		g.search_form = SearchForm()
 @app.route('/',methods=['GET','POST'])
 @app.route('/index',methods=['GET','POST'])
 @app.route('/index/<int:page>', methods = ['GET', 'POST'])
@@ -50,7 +51,7 @@ def after_login(resp):
 	if resp.email is None or resp.email =='':
 		flash('email不能为空，请重新登录')
 		return redirect(url_for('login'))
-	user =User.query.filter_by(email=resp.eml).first()#user =User.query.filter_by(nickname =resp.nickname).first()
+	user =User.query.filter_by(email=resp.email).first()#user =User.query.filter_by(nickname =resp.nickname).first()
 	if user is None:
 		nickname = resp.nickname
 		if nickname is None or nickname == '':
@@ -102,7 +103,7 @@ def edit():
 	else:
 		form.nickname.data =g.user.nickname
 		form.about_me.data=g.user.about_me
-	return render_template('edit.html',form=form)
+	return render_template('edit.html',form=form,title = '修改个人信息')
 @app.errorhandler(404)
 def internal_error(error):
 	return render_template('404.html'), 404
@@ -147,3 +148,33 @@ def unfollow(nickname):
 	db.session.commit()
 	flash('取消关注 %s 成功！！！ '%nickname)
 	return redirect(url_for('user', nickname=nickname))
+@app.route('/search',methods=['POST'])
+@login_required
+def search():
+	if not g.search_form.validate_on_submit():
+		return redirect(url_for('index'))
+	return redirect(url_for('search_results',query=g.search_form.search.data))
+
+from config import MAX_SEARCH_RESULTS
+@app.route('/search_results/<query>')
+@login_required
+def search_results(query):
+	results = Post.query.whoosh_search(query,MAX_SEARCH_RESULTS).all()
+	return render_template('search_results.html',
+							query=query,
+							title= '查询结果',
+							results =results)
+@app.route('/delete/<int:id>')
+@login_required
+def delete(id):
+	post = Post.query.get(id)
+	if post == None:
+		flash('找不到要删除的内容。')
+		return redirect(url_for('index'))
+	if post.author.id !=g.user.id:
+		flash('无法删除此内容')
+		return redirect(url_for('index'))
+	db.session.delete(post)
+	db.session.commit()
+	flash('删除成功！！！')
+	return redirect(url_for('index'))

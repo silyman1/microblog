@@ -8,7 +8,8 @@
         <td>
 			<h1>{{user.nickname}}:</h1>
 			{% if user.about_me %}<p>{{user.about_me}}</p>{% endif %}
-			{% if user.last_seen %}<p><i>上次登录时间: {{user.last_seen}}</i></p>{% endif %}
+			{% if user.last_seen %}
+			<p><em>上次登录时间: {{momentjs(user.last_seen).calendar()}}</em></p>{% endif %}
 			<p>{{user.followers.count()}}人关注|
 			{% if user.id == g.user.id %}
 				<a href="{{url_for('edit')}}">编辑个人信息</a>

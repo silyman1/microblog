@@ -14,18 +14,23 @@ function set_openid(openid,pr)
 	form.elements['openid'].value = openid
 }
 </script>
-<h1>登录myblog</h1>
+<h3>登录myblog</h3>
 <form action=""method="post"name="login">
 	{{form.hidden_tag()}}
 	<p>
-		请输入你的openID,或者选择一个openID提供商:<br>
+		请选择一个openID提供商:<br>
+		|{%for pr in  providers%}
+		<a href="javascript:set_openid('{{pr.url}}','{{pr.name}}');"><img src="/static/img/{{pr.name.lower()}}.png" class="img-polaroid" style="margin:2px;" /></a>|
+		{%endfor%}
+	</p>
+	<p>
+		或在此输入你的openID：
+	</p>
+	<p>
 		{{form.openid(size=80)}}<br>
 		{%for error in form.openid.errors%}
 			<span style="color: red;">[{{error}}]</span>
 		{%endfor %}<br>
-		|{%for pr in  providers%}
-		<a href="javascript:set_openid('{{pr.url}}','{{pr.name}}');">{{pr.name}}</a>|
-		{%endfor%}
 	</p>
 	<p>{{form.remember_me}} 记住此ID</p>
     <p><input type="submit" value="登录"></p>

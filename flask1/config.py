@@ -21,3 +21,8 @@ OPENID_PROVIDERS = [
 	
 # pagination
 POSTS_PER_PAGE = 8
+
+
+#全文搜索数据库
+WHOOSH_BASE = os.path.join(basedir, 'search.db')
+MAX_SEARCH_RESULTS = 50

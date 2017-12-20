@@ -1,5 +1,14 @@
 <table>
     <tr valign="top">
-        <td><img src="{{post.author.avatar(50)}}"></td><td><i>{{post.author.nickname}} :</i><br>{{post.body}}</td>
+        <td><a href="{{url_for('user', nickname = post.author.nickname)}}"><img src="{{post.author.avatar(50)}}"></td>
+        <td>
+			<p><a href="{{url_for('user', nickname = post.author.nickname)}}">{{post.author.nickname}}:</a><strong>{{post.body}}</strong></p>
+			<p>{{momentjs(post.timestamp).fromNow()}}
+			{% if post.author.id == g.user.id %}
+			<a href="{{ url_for('delete', id = post.id) }}">删除</a>
+			{% endif %}
+			</p>
+		</td>
     </tr>
+
 </table>
