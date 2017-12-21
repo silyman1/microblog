@@ -1,0 +1,17 @@
+
+序号	属性	说明
+1	items	当前页的记录个数
+2	query	分页的源查询
+3	page	当前的页数
+4	prev_num	上一页数
+5	next_num	下一页数
+6	has_prev	是否有上一页
+7	has_next	是否有下一页
+8	pages	总的页数
+9	per_page	每页显示的记录条数
+10	total	总的记录条数
+
+序号	方法	说明
+1	iter_pages(left_edge=2,left_current=2,right_current=5,right_age=2)	一个迭代器，返回选中当前页时显示的页数列表。如这个例子中最左边显示2个页数，当前页的左边显示2个页数，当前页的右边显示5个页数而当前页的最右边显示2个页数
+2	prev()	上一页的分页对象
+3	next()	下一页的分页对象

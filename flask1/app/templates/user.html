@@ -7,7 +7,8 @@
         <td><img src="{{user.avatar(128)}}"></td>
         <td>
 			<h1>{{user.nickname}}:</h1>
-			{% if user.about_me %}<p>{{user.about_me}}</p>{% endif %}
+			<p><i>简介：</i>{% if user.about_me %}{{user.about_me}}</p>{% endif %}
+			<p><i>邮箱：</i>{{user.email}}</p>
 			{% if user.last_seen %}
 			<p><em>上次登录时间: {{momentjs(user.last_seen).calendar()}}</em></p>{% endif %}
 			<p>{{user.followers.count()}}人关注|
@@ -16,7 +17,7 @@
 			{%elif not g.user.is_following(user)%}
 				<a href="{{url_for('follow',nickname=user.nickname)}}">关注</a>
 			{%else%}
-				<a href="{{url_for('follow',nickname=user.nickname)}}">取消关注</a>
+				<a href="{{url_for('unfollow',nickname=user.nickname)}}">取消关注</a>
 			{% endif %}
 			</p>
 		</td>
@@ -26,6 +27,20 @@
 {% for post in posts.items %}
 	{%include 'post.html'%}
 {% endfor %}
-{% if posts.has_prev %}<a href="{{ url_for('index', page = posts.prev_num) }}"><< 上一页</a>{% else %}<< 上一页{% endif %} |
-{% if posts.has_next %}<a href="{{ url_for('index', page = posts.next_num) }}">下一页>></a>{% else %}下一页 >>{% endif %}
+<!--不带省略号的分页-->
+<div class="pagination">
+  <ul>
+    <li>{% if posts.has_prev %}<a href="{{ url_for('user',nickname=user.nickname,page = posts.prev_num) }}"><<上一页</a>{% else %}<span><<上一页</span>{% endif %}</li>
+    {%for p in posts.iter_pages(left_edge=2,left_current=2,right_current=5,right_edge=2)%}
+		{% if p %}
+			{% if p == posts.page %}
+			<li class="active"><a href="{{ url_for('user',nickname=user.nickname,page = p) }}">{{p}}</a></li>
+			{% else %}
+			<li><a href="{{ url_for('user',nickname=user.nickname,page = p) }}">{{p}}</a></li>
+			{%endif%}
+		{%endif%}
+	{%endfor%}
+    <li>{% if posts.has_next %}<a href="{{ url_for('user',nickname=user.nickname,page = posts.next_num) }}">下一页>></a>{% else %}<span>下一页>></span>{% endif %}</li>
+  </ul>
+</div>
 {% endblock %}

@@ -73,7 +73,7 @@ class Post(db.Model):
 	body = db.Column(db.String(140))
 	timestamp =db.Column(db.DateTime)
 	user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
-	
+	mark = db.Column(db.Integer)#设为隐私标记，仅自己可见
 	def __repr__(self):
 		return '<Post %r>'% (self.body)
 if enable_search:

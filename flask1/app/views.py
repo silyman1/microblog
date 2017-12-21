@@ -84,7 +84,7 @@ def user(nickname,page=1):
 	if user == None:
 		flash('用户:'+nickname+'未找到！！')
 		return redirect(url_for('index'))
-	posts = user.posts.paginate(page, POSTS_PER_PAGE, False)
+	posts = user.posts.order_by(Post.timestamp.desc()).paginate(page, POSTS_PER_PAGE, False)
 	return render_template('user.html',
 							user=user,
 							title='个人信息页',
@@ -178,3 +178,15 @@ def delete(id):
 	db.session.commit()
 	flash('删除成功！！！')
 	return redirect(url_for('index'))
+@app.route('/mark/<int:id>')
+@login_required
+def mark(id):
+	post = Post.query.get(id)
+	if post.mark == 0:
+		post.mark =1
+		flash('成功设为隐私！！')
+		return redirect(url_for('user',nickname=g.user.nickname))
+	if post.mark == 1:
+		post.mark =0
+		flash('已将此内容设为公开！！')
+		return redirect(url_for('user',nickname=g.user.nickname))
