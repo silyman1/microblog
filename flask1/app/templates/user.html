@@ -25,7 +25,11 @@
 </table>
 <hr>
 {% for post in posts.items %}
+	{%if post.author.id==g.user.id%}
 	{%include 'post.html'%}
+	{%elif post.mark==0%}
+	{%include 'post.html'%}
+	{%endif%}
 {% endfor %}
 <!--不带省略号的分页-->
 <div class="pagination">

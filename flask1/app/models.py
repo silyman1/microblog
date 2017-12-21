@@ -74,7 +74,13 @@ class Post(db.Model):
 	timestamp =db.Column(db.DateTime)
 	user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 	mark = db.Column(db.Integer)#设为隐私标记，仅自己可见
+	review = db.relationship('Comment', backref='lianxi', lazy='dynamic')
 	def __repr__(self):
 		return '<Post %r>'% (self.body)
+class Comment(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	comment_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+	content = db.Column(db.String(140))  # 评论功能
+	timestamp = db.Column(db.DateTime)
 if enable_search:
 	whooshalchemy.whoosh_index(app,Post)

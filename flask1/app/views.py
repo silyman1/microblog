@@ -25,7 +25,7 @@ def before_request():
 def index(page=1):
 	form = PostForm()
 	if form.validate_on_submit():
-		post = Post(body=form.post.data,timestamp=datetime.utcnow(),author=g.user)
+		post = Post(body=form.post.data,timestamp=datetime.utcnow(),author=g.user,mark=0)
 		db.session.add(post)
 		db.session.commit()
 		flash("发表成功~~")
@@ -92,10 +92,11 @@ def user(nickname,page=1):
 @app.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit():
-	form = EditForm(g.user.nickname)
+	form = EditForm(g.user.nickname,g.user.email)
 	if form.validate_on_submit():
 		g.user.nickname = form.nickname.data
 		g.user.about_me = form.about_me.data
+		g.user.email = form.email.data
 		db.session.add(g.user)
 		db.session.commit()
 		flash('信息修改成功！')
@@ -103,6 +104,7 @@ def edit():
 	else:
 		form.nickname.data =g.user.nickname
 		form.about_me.data=g.user.about_me
+		form.email.data = g.user.email
 	return render_template('edit.html',form=form,title = '修改个人信息')
 @app.errorhandler(404)
 def internal_error(error):
@@ -184,9 +186,13 @@ def mark(id):
 	post = Post.query.get(id)
 	if post.mark == 0:
 		post.mark =1
+		db.session.add(post)
+		db.session.commit()
 		flash('成功设为隐私！！')
 		return redirect(url_for('user',nickname=g.user.nickname))
 	if post.mark == 1:
 		post.mark =0
+		db.session.add(post)
+		db.session.commit()
 		flash('已将此内容设为公开！！')
 		return redirect(url_for('user',nickname=g.user.nickname))

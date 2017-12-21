@@ -4,6 +4,10 @@
 {% block content %}
 <h1>搜索"{{query}}"的结果为:(最多只显示50条结果)</h1>
 {% for post in results %}
-    {% include 'post.html' %}
+	{%if post.author.id==g.user.id%}
+	{%include 'post.html'%}
+	{%elif post.mark==0%}
+	{%include 'post.html'%}
+	{%endif%}
 {% endfor %}
 {% endblock %}

@@ -9,10 +9,11 @@
 			  {%if post.mark==0%}
 			  |<a href="{{ url_for('mark', id = post.id) }}">设为隐私</a>
 			  {%else%}
-			  |<a href="{{ url_for('mark', id = post.id) }}">公开</a>
+			  |<span>已设为隐私</span>
+			  |<a href="{{ url_for('mark', id = post.id) }}">点击公开</a>
 			  {%endif%}
 			{% endif %}
-			</p>
+			</span>
 		</td>
     </tr>
 
