@@ -1,0 +1,20 @@
+<table>
+    <tr valign="top">
+        <td><a href="{{url_for('user', nickname = post.author.nickname)}}"><img src="{{post.author.avatar(15)}}" class="img-circle"></td>
+        <td>
+			<p><a href="{{url_for('user', nickname = post.author.nickname)}}">{{post.author.nickname}}:</a><strong>{{post.body}}</strong></p>
+			<p>{{momentjs(post.timestamp).fromNow()}}
+			{% if post.author.id == g.user.id %}
+			  <a href="{{ url_for('delete', id = post.id) }}">删除</a>
+			  {%if post.mark==0%}
+			  |<a href="{{ url_for('mark', id = post.id) }}">设为隐私</a>
+			  {%else%}
+			  |<span>已设为隐私</span>
+			  |<a href="{{ url_for('mark', id = post.id) }}">点击公开</a>
+			  {%endif%}
+			{% endif %}
+			</p>
+		</td>
+    </tr>
+
+</table>

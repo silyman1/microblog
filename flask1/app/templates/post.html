@@ -1,9 +1,12 @@
 <table>
     <tr valign="top">
-        <td><a href="{{url_for('user', nickname = post.author.nickname)}}"><img src="{{post.author.avatar(50)}}"></td>
-        <td>
-			<p><a href="{{url_for('user', nickname = post.author.nickname)}}">{{post.author.nickname}}:</a><strong>{{post.body}}</strong></p>
-			<p>{{momentjs(post.timestamp).fromNow()}}
+        <td><p><a href="{{url_for('user', nickname = post.author.nickname)}}"><img src="{{post.author.avatar(30)}}" class="img-circle">
+			&nbsp;<big><a href="{{url_for('user', nickname = post.author.nickname)}}">{{post.author.nickname}}:</a></big><strong>{{post.body}}</strong><i>&nbsp;&nbsp;{{momentjs(post.timestamp).fromNow()}}</i></big></p>
+		</td>
+	</tr>
+	<tr valign="middle">
+		<td>
+			<p>
 			{% if post.author.id == g.user.id %}
 			  <a href="{{ url_for('delete', id = post.id) }}">删除</a>
 			  {%if post.mark==0%}
@@ -13,8 +16,31 @@
 			  |<a href="{{ url_for('mark', id = post.id) }}">点击公开</a>
 			  {%endif%}
 			{% endif %}
-			</span>
+			</p>
 		</td>
     </tr>
-
+	<tr valign="top">
+	  <td style="background-color:#FAF0E6;" >
+	  {%if post.post_comments()%}
+	    <p><span>&nbsp;评论：</span></p>
+		{%for comment in post.post_comments()%}
+		<p><span>{%include 'comment.html'%}</span></p>
+		{%endfor%}
+	  {%else%}
+	  <p>暂无评论</p>
+	  {%endif%}
+	  </td>
+	</tr>
+	<tr valign="middle">
+		<form action="{{url_for('comment',id=post.id)}}" method="post" name="comment">
+			<td><p>{{g.form2.hidden_tag()}}{{g.form2.comment(size=30,maxlength=140,placeholder="请在此评论")}}
+				<div class="control-group" >
+				  <div class="controls">
+				    <input class="btn btn-primary" type="submit" value="评论">
+				  </div>
+				</div>
+				</p>
+			</td>
+		</form>
+	</tr>
 </table>

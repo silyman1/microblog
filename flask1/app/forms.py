@@ -21,21 +21,16 @@ class EditForm(Form):
 			return False
 		if self.nickname.data == self.original_nickname:
 			if self.email.data== self.original_email:
-				print 'ok5'
-				return True
+				return True#未作修改成功返回
 			else:
 				if email != None:
-					print 'ok4444'
 					self.email.errors.append('此邮箱已被使用！！！')
 					return  False
 				else:
-					print 'ok'
 					return True
 		if user != None:
-			print 'ok2'
 			self.nickname.errors.append('此昵称已被使用!!!')
 			return False
-		print 'ok3'
 		return True
 class PostForm(Form):
 	post = StringField('post',validators=[DataRequired()])

@@ -2,12 +2,12 @@
 from app import app,db,lm,oid
 from flask import render_template,flash,redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from .forms import LoginForm,EditForm,PostForm,SearchForm
-from .models import User,Post
+from .forms import LoginForm,EditForm,PostForm,SearchForm,CommentForm
+from .models import User,Post,Comment
 import sys
 import time
 from datetime import datetime
-from config import POSTS_PER_PAGE
+from config import POSTS_PER_PAGE,COMMENTS_PER_PAGE
 reload(sys)
 sys.setdefaultencoding('utf8')
 @app.before_request
@@ -18,6 +18,7 @@ def before_request():
 		db.session.add(g.user)
 		db.session.commit()
 		g.search_form = SearchForm()
+		g.form2 = CommentForm()
 @app.route('/',methods=['GET','POST'])
 @app.route('/index',methods=['GET','POST'])
 @app.route('/index/<int:page>', methods = ['GET', 'POST'])
@@ -196,3 +197,30 @@ def mark(id):
 		db.session.commit()
 		flash('已将此内容设为公开！！')
 		return redirect(url_for('user',nickname=g.user.nickname))
+@app.route('/comment/<int:id>',methods =['GET','POST'])
+@login_required
+def comment(id):
+	post = Post.query.filter_by(id=id).first()
+	if g.form2.validate_on_submit():
+		print g.user.nickname
+		comment = Comment(content=g.form2.comment.data,timestamp=datetime.utcnow(),post=post,observer=g.user.nickname)
+		db.session.add(comment)
+		db.session.commit()
+		flash("评论成功~~")
+		return redirect(url_for('index'))
+	flash("评论失败~~")
+	return redirect(url_for('index'))
+@app.route('/delete_c/<int:id>')
+@login_required
+def delete_c(id):
+	comment = Comment.query.get(id)
+	if comment == None:
+		flash('找不到要删除的评论。')
+		return redirect(url_for('index'))
+	if comment.post.user_id !=g.user.id:
+		flash('无法删除此内容')
+		return redirect(url_for('index'))
+	db.session.delete(comment)
+	db.session.commit()
+	flash('删除评论成功！！！')
+	return redirect(url_for('index'))

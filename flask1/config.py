@@ -26,3 +26,5 @@ POSTS_PER_PAGE = 8
 #全文搜索数据库
 WHOOSH_BASE = os.path.join(basedir, 'search.db')
 MAX_SEARCH_RESULTS = 50
+#comment
+COMMENTS_PER_PAGE = 4

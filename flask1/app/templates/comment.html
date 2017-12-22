@@ -1,0 +1,6 @@
+<p>
+	<a href="{{url_for('user', nickname = comment.observer)}}"><small>{{comment.observer}}:</small></a>
+	<span><small>{{comment.content}}</small></span>
+	<span><small><i>&nbsp;&nbsp;&nbsp;{{momentjs(comment.timestamp).fromNow()}}</i></small></span>
+	<span>{%if comment.post.user_id ==g.user.id%}<small><i><a href="{{url_for('delete_c', id = comment.id)}}">删除评论</i></small>{%endif%}</span>
+</p>
