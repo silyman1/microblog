@@ -21,7 +21,8 @@ OPENID_PROVIDERS = [
 	
 # pagination
 POSTS_PER_PAGE = 8
-
+#...
+DEFAULT_BACKGROUND = '444.jpg'
 
 #全文搜索数据库
 WHOOSH_BASE = os.path.join(basedir, 'search.db')

@@ -7,7 +7,7 @@ from .models import User,Post,Comment
 import sys
 import time
 from datetime import datetime
-from config import POSTS_PER_PAGE,COMMENTS_PER_PAGE
+from config import POSTS_PER_PAGE,COMMENTS_PER_PAGE,DEFAULT_BACKGROUND
 reload(sys)
 sys.setdefaultencoding('utf8')
 @app.before_request
@@ -21,7 +21,7 @@ def before_request():
 		g.form2 = CommentForm()
 @app.route('/',methods=['GET','POST'])
 @app.route('/index',methods=['GET','POST'])
-@app.route('/index/<int:page>', methods = ['GET', 'POST'])
+@app.route('/index/<int:page>/<background>', methods = ['GET', 'POST'])
 @login_required
 def index(page=1):
 	form = PostForm()
@@ -32,7 +32,7 @@ def index(page=1):
 		flash("发表成功~~")
 		return redirect(url_for('index'))#避免了用户在提交 blog 后不小心触发刷新的动作而导致插入重复的 blog。
 	posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
-	return render_template("index.html",form= form,title='我的主页',posts=posts)
+	return render_template("index.html",form= form,title='我的主页',background= g.user.fav,posts=posts)
 	
 @app.route('/login',methods =['GET','POST'])
 @oid.loginhandler
@@ -59,7 +59,8 @@ def after_login(resp):
 			flash('昵称不能为空，请重新登录')
 			return redirect(url_for('login'))
 		nickname = User.make_unique_nickname(nickname)
-		user = User(nickname=nickname,email=resp.email)
+		user = User(nickname=nickname,email=resp.email,fav =DEFAULT_BACKGROUND)
+		
 		db.session.add(user)
 		db.session.commit()
 		db.session.add(user.follow(user))     #关注自己
@@ -223,4 +224,20 @@ def delete_c(id):
 	db.session.delete(comment)
 	db.session.commit()
 	flash('删除评论成功！！！')
+	return redirect(url_for('index'))
+@app.route('/change/<choose>',methods =['GET','POST'])
+@login_required
+def change(choose):
+	if choose == 'A':
+		print 'aaaa'
+		g.user.fav='111.jpg'
+	elif choose=='B':
+		g.user.fav='222.jpg'
+	elif choose=='C':
+		g.user.fav='333.jpg'
+	else:
+		g.user.fav='444.jpg'
+	print g.user.fav,'bbbb'
+	db.session.add(g.user)
+	db.session.commit()
 	return redirect(url_for('index'))
