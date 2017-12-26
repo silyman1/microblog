@@ -5,9 +5,9 @@
 	{{form.hidden_tag()}}
 	<table>
 		<tr>
-			<td>现在想说点什么：</td>
-			<td>{{form.post(size=30,maxlength=140)}}</td>
-			<td><div class="control-group"><div class="controls"><input class="btn btn-primary" type="submit" value="发表"></div></div></td>
+			<td width="280">现在想说点什么：</td>
+			<td width="120">{{form.post(style="width:380px;height:35px")}}</td>
+			<td width="150"><div class="control-group"><div class="controls"><input class="btn btn-primary" type="submit" value="发表"></div></div></td>
 			<td>
 			{%for error in form.errors.post%}
 			<span style="color:red;">[{{error}}]</span><br>

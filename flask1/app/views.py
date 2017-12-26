@@ -7,7 +7,7 @@ from .models import User,Post,Comment
 import sys
 import time
 from datetime import datetime
-from config import POSTS_PER_PAGE,COMMENTS_PER_PAGE,DEFAULT_BACKGROUND
+from config import POSTS_PER_PAGE,COMMENTS_PER_PAGE,DEFAULT_BACKGROUND,DEFAULT_AVATAR,avatar_urls
 reload(sys)
 sys.setdefaultencoding('utf8')
 @app.before_request
@@ -45,6 +45,7 @@ def login():
 		return oid.try_login(form.openid.data, ask_for=['nickname', 'email'])
 	return render_template('login.html',
 						   title = '登录',
+						   background='login.gif',
 						   form = form,
 						   providers = app.config['OPENID_PROVIDERS'])
 @oid.after_login
@@ -59,7 +60,7 @@ def after_login(resp):
 			flash('昵称不能为空，请重新登录')
 			return redirect(url_for('login'))
 		nickname = User.make_unique_nickname(nickname)
-		user = User(nickname=nickname,email=resp.email,fav =DEFAULT_BACKGROUND)
+		user = User(nickname=nickname,email=resp.email,fav =DEFAULT_BACKGROUND,img = DEFAULT_AVATAR)
 		
 		db.session.add(user)
 		db.session.commit()
@@ -89,6 +90,7 @@ def user(nickname,page=1):
 	posts = user.posts.order_by(Post.timestamp.desc()).paginate(page, POSTS_PER_PAGE, False)
 	return render_template('user.html',
 							user=user,
+							background= g.user.fav,
 							title='个人信息页',
 							posts=posts)
 @app.route('/edit', methods=['GET', 'POST'])
@@ -107,7 +109,7 @@ def edit():
 		form.nickname.data =g.user.nickname
 		form.about_me.data=g.user.about_me
 		form.email.data = g.user.email
-	return render_template('edit.html',form=form,title = '修改个人信息')
+	return render_template('edit.html',form=form,background= g.user.fav,title = '修改个人信息')
 @app.errorhandler(404)
 def internal_error(error):
 	return render_template('404.html'), 404
@@ -167,6 +169,7 @@ def search_results(query):
 	return render_template('search_results.html',
 							query=query,
 							title= '查询结果',
+							background= g.user.fav,
 							results =results)
 @app.route('/delete/<int:id>')
 @login_required
@@ -229,15 +232,28 @@ def delete_c(id):
 @login_required
 def change(choose):
 	if choose == 'A':
-		print 'aaaa'
 		g.user.fav='111.jpg'
 	elif choose=='B':
 		g.user.fav='222.jpg'
 	elif choose=='C':
-		g.user.fav='333.jpg'
+		g.user.fav='555.jpg'
 	else:
 		g.user.fav='444.jpg'
-	print g.user.fav,'bbbb'
 	db.session.add(g.user)
 	db.session.commit()
 	return redirect(url_for('index'))
+@app.route('/change_avatar',methods =['GET','POST'])
+@login_required
+def change_avatar():
+	return render_template('avatar.html',
+							title="更改头像",
+							background= g.user.fav)
+@app.route('/save_avatar/<img>',methods =['GET','POST'])
+@login_required
+def save_avatar(img):
+	img = avatar_urls[img]
+	g.user.img = img
+	db.session.add(g.user)
+	db.session.commit()
+	flash('修改头像成功！！！')
+	return redirect(url_for('user',nickname=g.user.nickname))

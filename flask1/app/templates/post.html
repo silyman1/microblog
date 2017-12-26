@@ -1,6 +1,6 @@
 <table>
     <tr valign="top">
-        <td><p><a href="{{url_for('user', nickname = post.author.nickname)}}"><img src="{{post.author.avatar(30)}}" class="img-circle">
+        <td><p><a href="{{url_for('user', nickname = post.author.nickname)}}"><img src="{{post.author.avatar()}}"width="30" class="img-circle">
 			&nbsp;<big><a href="{{url_for('user', nickname = post.author.nickname)}}">{{post.author.nickname}}:</a></big><strong>{{post.body}}</strong><i>&nbsp;&nbsp;{{momentjs(post.timestamp).fromNow()}}</i></big></p>
 		</td>
 	</tr>
@@ -20,7 +20,7 @@
 		</td>
     </tr>
 	<tr valign="top">
-	  <td style="background-color:#FAF0E6;" >
+	  <td style="background-color:#FAF0E6;" width="480">
 	  {%if post.post_comments()%}
 	    <p><span>&nbsp;评论：</span></p>
 		{%for comment in post.post_comments()%}
@@ -33,13 +33,15 @@
 	</tr>
 	<tr valign="middle">
 		<form action="{{url_for('comment',id=post.id)}}" method="post" name="comment">
-			<td><p>{{g.form2.hidden_tag()}}{{g.form2.comment(size=30,maxlength=140,placeholder="请在此评论")}}
+			<td width="120">
+				{{g.form2.hidden_tag()}}{{g.form2.comment(style="width:480px;",placeholder="请在此评论")}}
+			</td>
+			<td width="120">
 				<div class="control-group" >
 				  <div class="controls">
 				    <input class="btn btn-primary" type="submit" value="评论">
 				  </div>
 				</div>
-				</p>
 			</td>
 		</form>
 	</tr>

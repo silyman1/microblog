@@ -4,16 +4,17 @@
 {%block content%}
 <table>
     <tr valign="top">
-        <td><img src="{{user.avatar(128)}}"></td>
+        <td><img src="{{user.avatar()}}"width="178" height="200"></td>
         <td>
 			<h1>{{user.nickname}}:</h1>
 			<p><i>简介：</i>{% if user.about_me %}{{user.about_me}}</p>{% endif %}
 			<p><i>邮箱：</i>{{user.email}}</p>
 			{% if user.last_seen %}
 			<p><em>上次登录时间: {{momentjs(user.last_seen).calendar()}}</em></p>{% endif %}
-			<p>{{user.followers.count()}}人关注|
+			<p>{{user.followers.count()}}人关注
 			{% if user.id == g.user.id %}
-				<a href="{{url_for('edit')}}">编辑个人信息</a>
+				<a href="{{url_for('edit')}}">|编辑个人信息</a>
+				<a href="{{url_for('change_avatar')}}">|换头像</a>
 			{%elif not g.user.is_following(user)%}
 				<a href="{{url_for('follow',nickname=user.nickname)}}">关注</a>
 			{%else%}

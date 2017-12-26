@@ -15,30 +15,22 @@
     <style type="text/css">
 	body {  
     background:#3d71b8 url(/static/img/{{background}});  
-    background-size: cover;
-	background-attachment: fixed; 
-    background-position:center;
-	background-repeat:no-repeat;
-	-webkit-background-size: cover;
-    -o-background-size: cover;
+    background-size: 1background-size: cover;
+	-webkit-background-size: cover; 
+    background-position:center;  
 }  
-	table {
-
-	able-layout: fixed;
-
-	word-wrap:break-word;
-	width:600px; 
-}
 	</style>
   </head>
   <body>
     <div class="container">
-      <div class="navbar">
+      <div class="navbar ">
         <div class="navbar-inner">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
 			<ul class="nav nav-tabs">
-				<li class="navbar-header">
-					<a class="navbar-brand" href="#">lowb空间</a>
-				</li>
 				<li>
 					<a href="/index">首页</a></li>
 				{%if g.user.is_authenticated()%}

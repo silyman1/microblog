@@ -23,9 +23,18 @@ OPENID_PROVIDERS = [
 POSTS_PER_PAGE = 8
 #...
 DEFAULT_BACKGROUND = '444.jpg'
-
+DEFAULT_AVATAR = '/static/img/001.jpg'
 #全文搜索数据库
 WHOOSH_BASE = os.path.join(basedir, 'search.db')
 MAX_SEARCH_RESULTS = 50
 #comment
 COMMENTS_PER_PAGE = 4
+
+avatar_urls =  {'A01':'/static/img/dynamic2.gif',
+				'A02':'/static/img/dynamic3.gif',
+				'A03':'/static/img/pig2.gif',
+				'A04':'/static/img/pig5.jpg',
+				'A05':'/static/img/pig4.jpg',
+				'A06':'/static/img/pig3.jpg',
+				'A07':'/static/img/pig1.jpg',
+}

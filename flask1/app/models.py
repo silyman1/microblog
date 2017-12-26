@@ -21,6 +21,7 @@ class User(db.Model):
 	about_me = db.Column(db.String(140))
 	last_seen = db.Column(db.DateTime)
 	fav = db.Column(db.String(64))
+	img = db.Column(db.String(64))
 	followed =db.relationship('User',
 							secondary = followers,
 							primaryjoin = (followers.c.follower_id == id),
@@ -50,8 +51,8 @@ class User(db.Model):
 				break
 			version += 1
 		return new_nickname
-	def avatar(self, size):
-		return 'http://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&s=' + str(size)
+	def avatar(self):
+		return self.img
 	def is_authenticated(self):
 		return True
 

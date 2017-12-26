@@ -1,0 +1,35 @@
+<!-- extend base layout -->
+{% extends "base.html"%}
+
+{%block content%}
+<h2>请选择头像：</h2>
+<table>
+    <tr valign="top">
+        <td><p><img src="/static/img/dynamic2.gif"width="178" height="200">
+				<div><a href="{{url_for('save_avatar',img='A01')}}">设为头像</div></p>
+		</td>
+        <td><p><img src="/static/img/dynamic3.gif"width="178" height="200">
+				<div><a href="{{url_for('save_avatar',img='A02')}}">设为头像</div></p>
+		</td>
+		<td><p><img src="/static/img/pig2.gif"width="178" height="200">
+				<div><a href="{{url_for('save_avatar',img='A03')}}">设为头像</div></p>
+		</td>
+	</tr>
+    <tr valign="top">
+        <td><p><img src="/static/img/pig5.jpg"width="178" height="200">
+				<div><a href="{{url_for('save_avatar',img='A04')}}">设为头像</div></p>
+		</td>
+        <td><p><img src="/static/img/pig4.jpg"width="178" height="200">
+				<div><a href="{{url_for('save_avatar',img='A05')}}">设为头像</div></p>
+		</td>
+		<td><p><img src="/static/img/pig3.jpg"width="178" height="200">
+				<div><a href="{{url_for('save_avatar',img='A06')}}">设为头像</div></p>
+		</td>
+	</tr>
+	    <tr valign="top">
+        <td><p><img src="/static/img/pig1.jpg"width="178" height="200">
+				<div><a href="{{url_for('save_avatar',img='A07')}}">设为头像</div></p>
+		</td>
+	</tr>
+</table>
+{%endblock%}

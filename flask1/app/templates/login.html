@@ -14,25 +14,31 @@ function set_openid(openid,pr)
 	form.elements['openid'].value = openid
 }
 </script>
-<h3>登录myblog</h3>
+<div class="well">
+<div style="color:#E0FFFF;">
+<h3 style="color:#C0C0C0;">欢迎登录！！！</h3>
 <form action=""method="post"name="login">
 	{{form.hidden_tag()}}
-	<p>
+	<p style="color:#C0C0C0;">
 		请选择一个openID提供商:<br>
-		|{%for pr in  providers%}
-		<a href="javascript:set_openid('{{pr.url}}','{{pr.name}}');"><img src="/static/img/{{pr.name.lower()}}.png" class="img-polaroid" style="margin:2px;" /></a>|
+		{%for pr in  providers%}
+		<a href="javascript:set_openid('{{pr.url}}','{{pr.name}}');"><img src="/static/img/{{pr.name.lower()}}.png" class="img-polaroid" style="margin:2px;" /></a>
 		{%endfor%}
 	</p>
-	<p>
+	<p style="color:#C0C0C0;">
 		或在此输入你的openID：
 	</p>
 	<p>
 		{{form.openid(size=80)}}<br>
 		{%for error in form.openid.errors%}
 			<span style="color: red;">[{{error}}]</span>
-		{%endfor %}<br>
+		{%endfor %}
 	</p>
-	<p>{{form.remember_me}} 记住此ID</p>
-    <p><input type="submit" value="登录"></p>
+	<p><label class="checkbox" for="remember_me" style="color:#C0C0C0;">
+               {{ form.remember_me }}记住ID
+       </label>
+    <input type="submit" class="btn btn-info" value="登录"></p>
 </form>
+</div>
+</div>
 {% endblock %}
