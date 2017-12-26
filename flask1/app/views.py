@@ -237,8 +237,10 @@ def change(choose):
 		g.user.fav='222.jpg'
 	elif choose=='C':
 		g.user.fav='555.jpg'
-	else:
+	elif choose == 'D':
 		g.user.fav='444.jpg'
+	else:
+		g.user.fav ='dyback.gif'
 	db.session.add(g.user)
 	db.session.commit()
 	return redirect(url_for('index'))
