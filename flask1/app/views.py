@@ -6,6 +6,7 @@ from .forms import LoginForm,EditForm,PostForm,SearchForm,CommentForm
 from .models import User,Post,Comment
 import sys
 import time
+import random
 from datetime import datetime
 from config import POSTS_PER_PAGE,COMMENTS_PER_PAGE,DEFAULT_BACKGROUND,DEFAULT_AVATAR,avatar_urls
 reload(sys)
@@ -37,6 +38,10 @@ def index(page=1):
 @app.route('/login',methods =['GET','POST'])
 @oid.loginhandler
 def login():
+	print User.query.all()
+	default_ulist = User.query.all()
+	x = random.randint(1,len(default_ulist)-1)
+	random_user = default_ulist[x]
 	if g.user is not None and g.user.is_authenticated():
 		return redirect(url_for('index'))
 	form = LoginForm()
@@ -47,6 +52,7 @@ def login():
 						   title = '登录',
 						   background='login.gif',
 						   form = form,
+						   random_user = random_user,
 						   providers = app.config['OPENID_PROVIDERS'])
 @oid.after_login
 def after_login(resp):
@@ -72,6 +78,12 @@ def after_login(resp):
 		session.pop('remember_me', None)
 	login_user(user, remember = remember_me)
 	return redirect(request.args.get('next') or url_for('index'))
+@app.route('/simple_login/user/<int:id>')
+def simple_login(id):
+	user = User.query.get(id)
+	print user
+	login_user(user, remember = False)
+	return redirect(url_for('index'))
 @lm.user_loader
 def load_user(id):
 	return User.query.get(int(id))
@@ -115,7 +127,7 @@ def internal_error(error):
 	return render_template('404.html'), 404
 
 @app.errorhandler(500)
-def internal_error(error):
+def internal_error2(error):
 	db.session.rollback()
 	return render_template('500.html'), 500
 @app.route('/follow/<nickname>')

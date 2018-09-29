@@ -26,7 +26,7 @@ function set_openid(openid,pr)
 		{%endfor%}
 	</p>
 	<p style="color:#C0C0C0;">
-		或在此输入你的openID：
+		在此输入你的openID：
 	</p>
 	<p>
 		{{form.openid(size=80)}}<br>
@@ -37,6 +37,9 @@ function set_openid(openid,pr)
 	<p><label class="checkbox" for="remember_me" style="color:#C0C0C0;">
                {{ form.remember_me }}记住ID
        </label>
+		<p style="color:#C0C0C0;">
+		若无法登录，请使用此随机账号：<a href="{{ url_for('simple_login',id = random_user.id) }}">{{random_user.nickname}}</a>
+	</p>
     <input type="submit" class="btn btn-info" value="登录"></p>
 </form>
 </div>
